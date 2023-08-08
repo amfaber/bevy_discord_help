@@ -1,19 +1,17 @@
 # bevy_discord_help
 
-A small repo to get some help from the bevy discord
+A small repo to make questions clearer on the bevy discord
 
-This is still pretty dirty, this is my first attempt at implementing a custom rendering node in bevy and I am still very much learning. The workflow
-is to try to run the program and fix any panics encountered.
+I am trying to morph the shader instancing example into my own custom rendering pipeline that will eventually be used for volume rendering.
 
-Currently we hit this error, but I can't figure out why there's a discrepency between the render pipelines layout (presumably set by specializing the mesh pipeline) and the bindgroup's (presumably set by SetMeshViewBindGroup<0>).
-```
-Caused by:
-    In a RenderPass
-      note: encoder = `<CommandBuffer-(0, 1, Vulkan)>`
-    In a draw command, indexed:true indirect:false
-      note: render pipeline = `Volume render`
-    The pipeline layout, associated with the current render pipeline, contains a bind group layout at index 0 which is incompatible with the bind group layout associated with the bind group at 0
-```
+There are currently two roadblocks:
 
-I've noticed that sometimes it seems like "queue_volume_render" never runs, at which point the app runs fine without any panics, but obviously the actual
-volume render doesn't occur either. I have no idea what causes this, but closing the app and rerunning seems to bring you to the real crash in most cases.
+1. About 40% of the time when starting the app, its as if the custom rendering pipeline never gets registered. `queue_custom` never runs and nothing from
+the custom pipeline is rendered. Restarting the app gives it another chance to actually run the pipeline. I have no idea what could be causing this behaviour
+
+2. When the pipeline does run, the debugging cube now flickers. This behaviour started after I
+added the `prepare_render_textures` and added it to the prepare phase of rendering. The function
+serves to create screen space textures eventually used by the volume render. I tried following
+how bevy's prepass sets up its screen space buffers, but something is off. Perhaps prepare_windows doesn't run on every frame?
+
+

@@ -8,8 +8,9 @@ var my_sampler: sampler;
 
 @fragment
 fn fragment(in: MeshVertexOutput) -> @location(0) vec4<f32> {
-    let uv = (in.position.xy + 1.0) / 2.0;
-    let sample = textureSample(texture, my_sampler, uv);
+    // let uv = (in.position.xy + 1.0) / 2.0;
+    // let sample = textureSample(texture, my_sampler, uv);
     // return vec4(sample);
-    return vec4(in.position.xy / 10000., 0.0, 1.0);
+    // return vec4(in.position.xy / 10000., 0.0, 1.0);
+    return vec4(1.);
 }
